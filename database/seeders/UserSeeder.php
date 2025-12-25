@@ -18,7 +18,13 @@ class UserSeeder extends Seeder
             'role_id' => 1,
             'email' => 'manager@company.com',
             'password' => bcrypt('secret'),
+        ]);
 
+        User::create([
+            'name' => 'Client',
+            'role_id' => 2,
+            'email' => 'client@company.com',
+            'password' => bcrypt('secret'),
         ]);
     }
 }
