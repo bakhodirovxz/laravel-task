@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailJob;
+use App\Mail\ApplicationCreated;
 use App\Models\Application;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
@@ -18,7 +22,7 @@ class ApplicationController extends Controller
         $fileUrl = null;
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('applications', 'public');
-            $fileUrl = '/storage/' . $filePath;
+            $fileUrl = $filePath;
         }
 
         $application = new Application();
@@ -27,6 +31,9 @@ class ApplicationController extends Controller
         $application->message = $validated['message'];
         $application->file_url = $fileUrl;
         $application->save();
+
+        dispatch(new SendEmailJob($application));
+
 
         return redirect()->back()->with('success', 'Application submitted successfully.');
     }
