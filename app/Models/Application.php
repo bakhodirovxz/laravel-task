@@ -11,10 +11,13 @@ class Application extends Model
 
     protected $fillable = [
         'user_id',
-        'user_name',
         'subject',
         'message',
-        'status',
-        'file_path',
+        'file_url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -11,10 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applications', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('applications', function (Blueprint $table) {
+    $table->id();
+    $table->unsignedBigInteger('user_id'); // Avval ustunni yarating
+    $table->text('subject');
+    $table->text('message');
+    $table->text('file_url')->nullable();
+    $table->timestamps();
+
+    // Keyin foreign key qo'shing
+    $table->foreign('user_id')
+          ->references('id')
+          ->on('users')
+          ->onDelete('cascade');
+});
     }
 
     /**
