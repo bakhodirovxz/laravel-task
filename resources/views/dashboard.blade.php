@@ -55,6 +55,11 @@
                                     <form action="{{ route('applications.store') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
+                                        @if ($errors->has('limit'))
+                                            <div class="alert alert-danger">
+                                                {{ $errors->first('limit') }}
+                                            </div>
+                                        @endif
                                         <h2 class="text-2xl font-bold ">Submit your application</h2>
                                         <hr class="my-6">
                                         <label class="uppercase text-sm font-bold opacity-70">Subject</label>

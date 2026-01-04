@@ -7,12 +7,19 @@ use App\Mail\ApplicationCreated;
 use App\Models\Application;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
     public function store(Request $request)
     {
+        if ($this->checkDate()) {
+            return redirect()->back()->withErrors(['limit' => 'You have already submitted an application today. Please try again tomorrow.']);
+        }
+
+
+
         $validated = $request->validate([
             'subject' => 'required|string',
             'message' => 'required|string',
@@ -36,5 +43,13 @@ class ApplicationController extends Controller
 
 
         return redirect()->back()->with('success', 'Application submitted successfully.');
+    }
+
+    protected function checkDate()
+    {
+        $alreadySubmitted = Application::where('user_id', auth()->id())->whereDate('created_at', Carbon::today())->exists();
+        if ($alreadySubmitted) {
+            return true;
+        }
     }
 }
