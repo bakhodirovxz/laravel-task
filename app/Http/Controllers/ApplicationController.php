@@ -27,8 +27,13 @@ class ApplicationController extends Controller
         ]);
 
         $fileUrl = null;
+
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('applications', 'public');
+            $file = $request->file('file');
+            $originalName = $file->getClientOriginalName();
+
+            $filePath = $file->storeAs('applications', $originalName, 'public');
+
             $fileUrl = $filePath;
         }
 
